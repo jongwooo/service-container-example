@@ -1,0 +1,28 @@
+name: Redis Service Example
+
+on: [ push, workflow_dispatch ]
+
+jobs:
+  container-job:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - "6379:6379"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.20"
+      - name: Install dependencies
+        run: |
+          go get ./...
+      - name: Connect to Redis
+        run: go run cmd/main.go
