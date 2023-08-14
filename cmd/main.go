@@ -9,11 +9,11 @@ import (
 )
 
 func main() {
-	var redisClient = config.SetupRedis()
+	var redisClient, err = config.SetupRedis()
 	var c = context.Background()
 	var r output.CacheOutputPort = repository.NewRedisRepository(redisClient)
 
-	var err = r.Set(c, "octocat", "Mona the Octocat")
+	err = r.Set(c, "octocat", "Mona the Octocat")
 	if err != nil {
 		panic(err)
 	}
